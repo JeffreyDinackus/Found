@@ -1,35 +1,92 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import Navbar from './navbar';
-
-
+import axios from 'axios';
 
 const ConditionalElement = () => {
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const [textValue, setTextValue] = useState('');
+  const downloadLinkRef = useRef(null);
+  const [notes, setNotes] = useState([]);
 
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/notes');
+        setNotes(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchNotes();
+  }, []);
 
+  const handleTextAreaChange = (event) => {
+    setTextValue(event.target.value);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const content = e.target.result;
+        setTextValue(content);
+      };
+
+      reader.readAsText(file);
+    }
+  };
+
+  const handleDownload = () => {
+    const allNotesContent = notes.map((note) => note.content).join('\n');
+    const blob = new Blob([allNotesContent], { type: 'text/plain' });
+    const downloadLink = downloadLinkRef.current;
+
+    downloadLink.href = window.URL.createObjectURL(blob);
+    downloadLink.download = 'allNotes.txt';
+    downloadLink.click();
+  };
+
+  const saveNoteToMongoDB = async () => {
+    try {
+      await axios.post('http://localhost:5000/api/notes', { content: textValue });
+      // Refresh the notes after saving
+      const response = await axios.get('http://localhost:5000/api/notes');
+      setNotes(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
       {isAuthenticated ? (
         <>
           <p>Welcome, authenticated user!</p>
-          {/* Your authenticated content goes here */}
-          <Navbar></Navbar>
-          <textarea type="text" style={{ width: "100%", height: "600px" }} />
-
-
+          <button onClick={handleDownload}>Download Text</button>
+          <input type="file" accept=".txt" onChange={handleFileChange} />
+          <button onClick={saveNoteToMongoDB}>Save Note</button>
+          {/* Display notes as a list */}
+          <ul>
+            {notes.map((note) => (
+              <li key={note._id}>{note.content}</li>
+            ))}
+          </ul>
+          <textarea
+            value={textValue}
+            onChange={handleTextAreaChange}
+            style={{ width: '100%', height: '600px' }}
+            placeholder="Type your text here..."
+          />
+          <a ref={downloadLinkRef} style={{ display: 'none' }} />
         </>
       ) : (
         <>
           <p>You are not authenticated. Please log in.</p>
-          {/* <button onClick={() => loginWithRedirect()}>Log In</button> */}
-
-
-
-
-
+          <button onClick={() => loginWithRedirect()}>Log In</button>
         </>
       )}
     </div>
