@@ -1,11 +1,10 @@
 # Use Node.js LTS as the base image for the Express API
-FROM node:14
+FROM node:16
 
 WORKDIR /app
 
-COPY ./server ./
-RUN npm install
-
 COPY . .
+
+RUN npm install
 
 CMD ["node", "server.js"]

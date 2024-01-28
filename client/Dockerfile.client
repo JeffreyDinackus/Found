@@ -1,0 +1,26 @@
+# Use Node.js LTS as the base image for the React Vite app
+FROM node:latest AS builder
+
+WORKDIR /app2
+
+RUN pwd
+
+# Copy only the necessary files for npm install
+COPY . .
+
+RUN npm i 
+
+# Build the React Vite app
+RUN npm run build
+
+# Use a smaller image for the final runtime
+FROM node:21-alpine3.18
+
+WORKDIR /app2
+
+# Copy the built React Vite app from the builder image
+COPY --from=builder /app2/dist ./dist
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

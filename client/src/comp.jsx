@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
+import './App.css'
 
 const ConditionalElement = () => {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
@@ -77,9 +78,9 @@ const ConditionalElement = () => {
       {isAuthenticated ? (
         <>
           <p>Welcome, authenticated user!</p>
-          <button onClick={handleDownload}>Download Text</button>
-          <input type="file" accept=".txt" onChange={handleFileChange} />
-          <button onClick={saveNoteToMongoDB}>Save Note</button>
+          <button className='start-button' onClick={handleDownload}>Download Text</button>
+          <input type="file" className='start-button' accept=".txt" onChange={handleFileChange} />
+          <button className='start-button' onClick={saveNoteToMongoDB}>Save Note</button>
           {/* Display notes as a list */}
           <ul>
             {notes.map((note) => (
