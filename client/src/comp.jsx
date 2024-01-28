@@ -101,7 +101,7 @@ const ConditionalElement = () => {
       ) : (
         <>
           <p>You are not authenticated. Please log in.</p>
-          <button onClick={() => loginWithRedirect()}>Log In</button>
+          <button className='start-button' onClick={() => loginWithRedirect()}>Log In</button>
         </>
       )}
     </div>
