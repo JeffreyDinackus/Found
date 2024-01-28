@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import './App.css'
@@ -86,7 +86,7 @@ const ConditionalElement = () => {
             {notes.map((note) => (
               <li key={note._id}>
                 {note.content}
-                <button onClick={() => deleteNoteFromMongoDB(note._id)}>Delete</button>
+                <button className='start-button' onClick={() => deleteNoteFromMongoDB(note._id)}>Delete</button>
               </li>
             ))}
           </ul>
