@@ -1,21 +1,4 @@
-# Hoya Hacks
-
-
-git add .
-
-git commit -m "$CommitMSG"
-
-git push
-
-git clone $.gitlink
-
-cd $dirname
-
-
-docker build -t your-image-name .
-docker run -p 5000:5000 -p 27017:27017 -p 5173:5173 your-image-name
-
-
+# Found
 
 ## Philosophy
 
@@ -27,7 +10,17 @@ Plaintext Storage
 
 Offline Backups 
 
+## Features
 
+Application that allows saving of notes with authentication and persistence. 
+
+## Intended Users
+
+Journalists, People who want control of their data and want to escape big tech, people who want plain text backups, persecuted people, people who want a simple notes experience. 
+
+## Stack
+
+Express, React, Vite, JSX, MongoDB
 
 ## Minimum Viable Product
 
@@ -74,3 +67,5 @@ DNS
 Sync with Version Control(?)
 
 Ability to select font and change text size 
+
+Implement LiveCycle and Docker compose 
