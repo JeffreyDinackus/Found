@@ -12,6 +12,10 @@ git clone $.gitlink
 cd $dirname
 
 
+docker build -t your-image-name .
+docker run -p 5000:5000 -p 27017:27017 -p 5173:5173 your-image-name
+
+
 
 ## Philosophy
 

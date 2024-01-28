@@ -61,6 +61,17 @@ const ConditionalElement = () => {
     }
   };
 
+  const deleteNoteFromMongoDB = async (noteId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/notes/${noteId}`);
+      // Refresh the notes after deleting
+      const response = await axios.get('http://localhost:5000/api/notes');
+      setNotes(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       {isAuthenticated ? (
@@ -72,7 +83,10 @@ const ConditionalElement = () => {
           {/* Display notes as a list */}
           <ul>
             {notes.map((note) => (
-              <li key={note._id}>{note.content}</li>
+              <li key={note._id}>
+                {note.content}
+                <button onClick={() => deleteNoteFromMongoDB(note._id)}>Delete</button>
+              </li>
             ))}
           </ul>
           <textarea
