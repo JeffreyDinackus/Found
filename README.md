@@ -74,3 +74,5 @@ DNS
 Sync with Version Control(?)
 
 Ability to select font and change text size 
+
+Implement LiveCycle and Docker compose 
